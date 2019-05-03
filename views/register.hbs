@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+          
+            <form action="/auth/register" method="POST" encType="multipart/form-data">
+                <div class="form-group">
+                    <label for="profilePhoto">Profile Photo</label>
+                    <br>
+                    <input type="file" name="profilePhoto" id="profilePhoto">
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="password">Passowrd</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="comfirm_password">Confirm Passowrd</label>
+                    <input type="password" name="comfirm_password" id="comfirm_password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit">Register</button>
+                    <button type="reset">Clear</button>
+                </div>
+                <br>
+                Already have an account?
+                <a href="/auth/login">Login now</a>
+            </form>
+        </div>
+    </div>
+</div>

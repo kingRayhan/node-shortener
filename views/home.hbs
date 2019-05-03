@@ -1,0 +1,29 @@
+<h2 class="mb-5">All links sorted by you</h2>
+
+<div class="row">
+    <div class="col-md-12 mx-auto">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Acronym</th>
+                    <th width="60%">Redirect to</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each urls}}
+                <tr>
+                    <td>
+                        <a href="http://localhost:3000/{{this.acronym}}">{{this.acronym}}</a>
+                    </td>
+                    <td>{{this.redirectTo}}</td>
+                    <td>
+                        <a href="/{{this.acronym}}/edit">Edit</a>
+                        <button>Delete</button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
