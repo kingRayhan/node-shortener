@@ -49,7 +49,6 @@ app.use((req, res, next) => {
                 req.user.email
             )}`
     }
-
     next()
 })
 

@@ -21,6 +21,7 @@ module.exports.registerUser = async (req, res) => {
                 'Only image format is allowed for profile photo'
             ).custom(() => false)
         else {
+            // TODO: name profile photo with user id
             profilePhoto.mv(
                 __dirname +
                     '/../public/images/profilePhotos/' +
@@ -40,6 +41,7 @@ module.exports.registerUser = async (req, res) => {
         req.check('name', 'Name should be atleast 6 character').isLength({
             min: 6,
         })
+
     // Username:
     // ---------
     // username can not be empty
@@ -127,10 +129,21 @@ module.exports.registerUser = async (req, res) => {
 }
 
 module.exports.updateUser = async (req, res) => {
-    req.check('name', 'Name can not be empty').isLength({ min: 1 })
-    req.check('username', 'Username can not be empty').isLength({ min: 1 })
-    // req.check('email', 'Email is not valid').isEmail()
+    // Name:
+    // ---------
+    // Name can not be empty
+    // Name should be atleast 6 character
+    if (req.body.name.length === 0)
+        req.check('name', 'Name can not be empty').custom(e => false)
+    else
+        req.check('name', 'Name should be atleast 6 character').isLength({
+            min: 6,
+        })
 
+    // Password:
+    // ---------
+    // Is password field is filled then we will proceed
+    // password should be atleast 6 character
     if (req.body.password.length > 0) {
         req.check(
             'password',
@@ -138,25 +151,81 @@ module.exports.updateUser = async (req, res) => {
         ).isLength({ min: 6 })
     }
 
-    req.check('username', 'Username already used by another account').custom(
-        async username => {
-            const dbuser = await User.findOne({ username })
-            // if it is his username
-            if (dbuser.username === req.user.username) {
-                return true
-            }
-            // if it is not used by anyone
-            if (!dbuser) return true
-            // if it is used
-            if (dbuser) return false
+    // Username:
+    // ---------
+    // username can not be empty
+    // if username is current user then proceed
+    // username should be unique
+    const existedUser = await User.findOne({
+        username: req.body.username,
+    })
+    if (req.body.username.length === 0)
+        req.check('username', 'Username can not be empty').custom(e => false)
+    else if (existedUser && existedUser.username !== req.user.username) {
+        req.check(
+            'username',
+            `Username <b>${req.user.username}</b> is taken vai another account`
+        ).custom(() => false)
+    }
+
+    // Email:
+    // ---------
+    // email can not be empty
+    // Valid Email
+    // email should be unique
+    const isEmailExists = await User.findOne({
+        email: req.body.email,
+    })
+    if (req.body.email.length === 0)
+        req.check('email', 'Email can not be empty').custom(() => false)
+    else
+        req.check(
+            'email',
+            `<b>${req.body.email}</b> is not a valid email address`
+        ).isEmail()
+    if (isEmailExists && isEmailExists.email !== req.user.email)
+        req.check(
+            'email',
+            `Email address <b>${
+                req.body.email
+            }</b> is already used by other account`
+        ).custom(() => false)
+
+    // profileProto:
+    // -----------------
+    // If profile photo uploaded then update photo
+    // validation check
+    let profilePhotoPath = ''
+    if (req.files) {
+        const profilePhoto = req.files.profilePhoto
+        const imageFormats = ['png', 'jpg', 'jpeg', 'ico']
+        const isImageFormarAllowed = imageFormats.includes(
+            profilePhoto.mimetype.split('/')[1]
+        )
+
+        if (!isImageFormarAllowed)
+            req.check(
+                'profilePhoto',
+                'Only image format is allowed for profile photo'
+            ).custom(() => false)
+        else {
+            // TODO: name profile photo with user id
+            profilePhoto.mv(
+                __dirname +
+                    '/../public/images/profilePhotos/' +
+                    profilePhoto.name
+            )
+            profilePhotoPath = '/images/profilePhotos/' + profilePhoto.name
         }
-    )
+    }
 
     if (req.validationErrors()) req.flash('errors', req.validationErrors())
     else {
         const user = await User.findById(req.user._id)
         user.name = req.body.name
         user.username = req.body.username
+        user.email = req.body.email
+        if (profilePhotoPath) user.profileProto = profilePhotoPath
         if (req.body.password)
             user.password = bcrypt.hashSync(req.body.password)
         await user.save()
