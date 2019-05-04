@@ -1,22 +1,7 @@
-const express = require('express')
-const app = express()
+const { parseTemplate } = require('./providers/mail')
 
-const cookie = require('cookie-parser')
-const session = require('express-session')
-
-app.use(cookie())
-app.use(
-    session({
-        secret: '1556780172317',
-    })
-)
-
-app.get('/', (req, res) => {
-    res.cookie('name', 'My Name is Rayhan', { maxAge: 2 * 60 * 1000 })
-    res.send('hhh')
-})
-app.get('/get', (req, res) => {
-    res.json(req.cookies)
+const parse = parseTemplate('activationMail', {
+    btnUrl: `http://localhost:3000/activate/0d0de708-2aec-4232-8a51-c6fef50c59751556978606246`,
 })
 
-app.listen(4545)
+console.log(parse)

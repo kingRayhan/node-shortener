@@ -1,6 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
-
+const { sendActivationMail } = require('../providers/mail')
 module.exports.registerUser = async (req, res) => {
     // profilePhoto:
     // ---------
@@ -120,11 +120,20 @@ module.exports.registerUser = async (req, res) => {
         email,
         password: bcrypt.hashSync(password, 10),
     })
-    await userInstance.save()
+    const saveduser = await userInstance.save()
+
+    sendActivationMail(saveduser.email, {
+        btnUrl: `http://localhost:3000/activate/${saveduser.activationCode}`,
+    }).then(emailSent => {
+        req.flash(
+            'success_msg',
+            'You have successfully Registered , please activate your account'
+        )
+    })
 
     // after registration
     // Redirect to login page with a flash msg
-    req.flash('success_msg', 'You have successfully Registered')
+
     res.redirect('/auth/login')
 }
 

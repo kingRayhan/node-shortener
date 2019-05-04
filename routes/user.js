@@ -4,11 +4,11 @@ const {
     registerUser,
     updateUser,
 } = require('../controllers/authController')
-
+const User = require('../models/User')
 const passport = require('passport')
 const notAuthenticated = require('../middlewares/notAuthenticated')
 const Authenticated = require('../middlewares/Authenticated')
-
+const { sendActivationMail } = require('../providers/mail')
 /**
  * Get pages
  */
@@ -18,19 +18,6 @@ Router.get('/login', notAuthenticated, (req, res) => {
 Router.get('/register', notAuthenticated, (req, res) => {
     res.render('auth/register')
 })
-
-/**
- * Authenticate User with passport
- */
-Router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/auth/login',
-        failureFlash: true,
-    })(req, res, next)
-})
-
-Router.post('/settings', Authenticated, updateUser)
 
 Router.get('/settings', Authenticated, (req, res) => {
     const user = req.user
@@ -42,6 +29,17 @@ Router.get('/logout', Authenticated, (req, res) => {
     res.redirect('/auth/login')
 })
 
+Router.post('/settings', Authenticated, updateUser)
 Router.post('/register', registerUser)
+/**
+ * Authenticate User with passport
+ */
+Router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/auth/login',
+        failureFlash: true,
+    })(req, res, next)
+})
 
 module.exports = Router

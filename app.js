@@ -9,8 +9,12 @@ const expressValidator = require('express-validator')
 const fileUpload = require('express-fileupload')
 const passport = require('passport')
 const methodOverride = require('method-override')
-const app = express()
+
 const bcrypt = require('bcryptjs')
+
+const User = require('./models/User')
+
+const app = express()
 require('./db')
 
 app.use(expressValidator())
@@ -62,6 +66,21 @@ app.set('view engine', '.hbs')
 
 const Authenticated = require('./middlewares/Authenticated')
 app.use('/auth', require('./routes/user'))
+
+app.get('/activate/:code', async (req, res) => {
+    const user = await User.findOne({ activationCode: req.params.code })
+
+    if (!user) res.send('<h1>Wrong activate token</h1>')
+
+    user.activationCode = null
+
+    await user.save()
+    req.flash(
+        'success_msg',
+        'you account activated successfully, now you login to your account'
+    )
+    res.redirect('/auth/login')
+})
 
 app.use('/', Authenticated, require('./routes/shortener'))
 app.get('/:acronym', async (req, res) => {

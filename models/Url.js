@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 const urlShortener = new mongoose.Schema({
     acronym: String,
     redirectTo: String,
