@@ -13,10 +13,10 @@ const Authenticated = require('../middlewares/Authenticated')
  * Get pages
  */
 Router.get('/login', notAuthenticated, (req, res) => {
-    res.render('login')
+    res.render('auth/login')
 })
 Router.get('/register', notAuthenticated, (req, res) => {
-    res.render('register')
+    res.render('auth/register')
 })
 
 /**
@@ -34,7 +34,7 @@ Router.post('/settings', Authenticated, updateUser)
 
 Router.get('/settings', Authenticated, (req, res) => {
     const user = req.user
-    res.render('user-settings', { user })
+    res.render('auth/user-settings', { user })
 })
 
 Router.get('/logout', Authenticated, (req, res) => {

@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-header">
+        {{title}}
+    </div>
+    <div class="card-body">
+        <form action="/shortlink" method="post">
+
+            <input type="hidden" name="_method" value="{{method}}" />
+            <input type="hidden" name="_id" value="{{url._id}}" />
+        
+            <div class="form-group">
+                <input 
+                    type="text" 
+                    name="acronym" 
+                    id="acronym" 
+                    class="form-control" 
+                    placeholder="Acronym"
+                    value="{{url.acronym}}"
+                />
+            </div>
+            <div class="form-group">
+                <input 
+                    type="redirectTo" 
+                    name="redirectTo" 
+                    id="redirectTo" 
+                    class="form-control"
+                    placeholder="Direct Url" 
+                    value="{{url.redirectTo}}" 
+                />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary">{{btnLevel}}</button>
+            </div>
+        </form>
+    </div>
+</div>

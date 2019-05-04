@@ -18,8 +18,16 @@
                     </td>
                     <td>{{this.redirectTo}}</td>
                     <td>
-                        <a href="/{{this.acronym}}/edit">Edit</a>
-                        <button>Delete</button>
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="/{{this._id}}/edit">Edit</a>
+
+                            <form action="/shortlink" method="POST">
+                                <input type="hidden" name="_method" value="delete">
+                                <input type="hidden" name="_id" value="{{this._id}}">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        
                     </td>
                 </tr>
                 {{/each}}

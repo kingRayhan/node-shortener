@@ -8,6 +8,7 @@ const session = require('express-session')
 const expressValidator = require('express-validator')
 const fileUpload = require('express-fileupload')
 const passport = require('passport')
+const methodOverride = require('method-override')
 const app = express()
 const bcrypt = require('bcryptjs')
 require('./db')
@@ -19,6 +20,8 @@ app.use(express.json())
 app.use(flash())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+//src: https://stackoverflow.com/a/42912079/3705299
+app.use(methodOverride(req => req.body._method))
 app.use(
     session({
         secret: 'alkhsdfksdhds',
