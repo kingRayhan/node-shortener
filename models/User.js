@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
         default: v4() + Date.now(),
     },
     password: String,
+    google: String,
 })
 
 module.exports = mongoose.model('User', userSchema)

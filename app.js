@@ -60,6 +60,7 @@ app.use((req, res, next) => {
 })
 
 require('./providers/passport')
+require('./providers/passport-github')
 
 app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', '.hbs')

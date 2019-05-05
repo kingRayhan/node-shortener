@@ -124,6 +124,7 @@ module.exports.registerUser = async (req, res) => {
 
     sendActivationMail(saveduser.email, {
         btnUrl: `http://localhost:3000/activate/${saveduser.activationCode}`,
+        btnText: 'Activate your account',
     }).then(emailSent => {
         req.flash(
             'success_msg',

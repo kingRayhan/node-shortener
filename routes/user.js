@@ -42,4 +42,32 @@ Router.post('/login', (req, res, next) => {
     })(req, res, next)
 })
 
+Router.get(
+    '/google',
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+    })
+)
+Router.get(
+    '/github',
+    passport.authenticate('github', {
+        scope: ['profile'],
+    })
+)
+
+Router.get(
+    '/oauth-redirect/google',
+    passport.authenticate('google'),
+    (req, res) => {
+        res.redirect('/auth/settings')
+    }
+)
+Router.get(
+    '/oauth-redirect/github',
+    passport.authenticate('google'),
+    (req, res) => {
+        res.redirect('/auth/settings')
+    }
+)
+
 module.exports = Router
