@@ -14,7 +14,7 @@
                 {{#each urls}}
                 <tr>
                     <td>
-                        <a href="http://localhost:3000/{{this.acronym}}">{{this.acronym}}</a>
+                        <a href="/{{this.acronym}}">{{this.acronym}}</a>
                     </td>
                     <td>{{this.redirectTo}}</td>
                     <td>
@@ -27,7 +27,7 @@
                                 <button class="btn btn-danger">Delete</button>
                             </form>
                         </div>
-                        
+
                     </td>
                 </tr>
                 {{/each}}
